@@ -27,6 +27,22 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const collageCollection = client.db("bookMyCollage").collection("collages");
+    const usersCollections = client.db("bookMyCollage").collection("users");
+    const admissionCollections = client.db("bookMyCollage").collection("admission");
+    
+    // Users DB
+
+    app.get("/users" , async(req , res) => {
+      const result = await usersCollections.find().toArray();
+      res.send(result)
+    })
+
+    app.post('/users' ,async(req,res)=>{
+      const newUser = req.body;
+      console.log(newUser);
+      const result = await usersCollections.insertOne(newUser);
+      res.send(result);
+    })
 
     // collages DB
 
@@ -39,6 +55,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await collageCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Admission DB
+
+    app.get("/admission", async (req, res) => {
+      const result = await admissionCollections.find().toArray();
       res.send(result);
     });
 
