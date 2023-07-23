@@ -9,7 +9,7 @@ require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
-console.log(process.env.DB_USER);
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ue4cbab.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -29,20 +29,19 @@ async function run() {
     const collageCollection = client.db("bookMyCollage").collection("collages");
     const usersCollections = client.db("bookMyCollage").collection("users");
     const admissionCollections = client.db("bookMyCollage").collection("admission");
-    
+
     // Users DB
 
-    app.get("/users" , async(req , res) => {
+    app.get("/users", async (req, res) => {
       const result = await usersCollections.find().toArray();
-      res.send(result)
-    })
+      res.send(result);
+    });
 
-    app.post('/users' ,async(req,res)=>{
+    app.post("/users", async (req, res) => {
       const newUser = req.body;
-      console.log(newUser);
       const result = await usersCollections.insertOne(newUser);
       res.send(result);
-    })
+    });
 
     // collages DB
 
@@ -62,6 +61,22 @@ async function run() {
 
     app.get("/admission", async (req, res) => {
       const result = await admissionCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/admission/email", async (req, res) =>{
+     
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email}
+      }
+      const result = await admissionCollections.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/admission", async (req, res) => {
+      const admission = req.body;
+      const result = await admissionCollections.insertOne(admission);
       res.send(result);
     });
 
