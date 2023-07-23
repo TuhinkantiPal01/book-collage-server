@@ -1,9 +1,9 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
-require('dotenv').config()
+require("dotenv").config();
 
 //*? MiddleWare
 
@@ -30,10 +30,17 @@ async function run() {
 
     // collages DB
 
-    app.get("/collages" , async(req ,res) => {
-        const result = await collageCollection.find().toArray();
-        res.send(result);
-    })
+    app.get("/collages", async (req, res) => {
+      const result = await collageCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/collages/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await collageCollection.findOne(query);
+      res.send(result);
+    });
 
     app.get("/", (req, res) => {
       res.send("App is running");
