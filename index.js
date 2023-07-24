@@ -29,7 +29,8 @@ async function run() {
     const collageCollection = client.db("bookMyCollage").collection("collages");
     const usersCollections = client.db("bookMyCollage").collection("users");
     const admissionCollections = client.db("bookMyCollage").collection("admission");
-
+    const reviewsCollections = client.db("bookMyCollage").collection("reviews");
+   
     // Users DB
 
     app.get("/users", async (req, res) => {
@@ -82,7 +83,17 @@ async function run() {
 
     // Review DB
 
-    
+    app.get("/reviews", async (req, res) => {
+      const result = await reviewsCollections.find().toArray();
+      res.send(result);
+    })
+
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      console.log(req.body);
+      const result = await reviewsCollections.insertOne(review);
+      res.send(result);
+    });
 
 
     app.get("/", (req, res) => {
