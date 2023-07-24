@@ -81,6 +81,13 @@ async function run() {
       res.send(result);
     });
 
+    app.delete('/admission/:id' ,async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)};
+      const result = await admissionCollections.deleteOne(query);
+      res.send(result);
+    })
+
     // Review DB
 
     app.get("/reviews", async (req, res) => {
