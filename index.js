@@ -80,6 +80,11 @@ async function run() {
       res.send(result);
     });
 
+    // Review DB
+
+    
+
+
     app.get("/", (req, res) => {
       res.send("App is running");
     });
